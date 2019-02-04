@@ -1,29 +1,45 @@
-h1 {
-    align-content: center;
+.heading {
+    justify-content: center;
     font-family: 'Acme', sans-serif;;
     color: "rgba 60, 60, 60, 1";
 }
+.buttons {
+    height: 60px;
+}
+button {
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+    outline: none;
+    border-radius: 3px;
+    /* height: 40px; */
+
+}
 
 button#newGame {
-    margin: 20px;
-    font-size: 18px;
+    display: inline-block;
     background: rgb(107, 182, 226);
     border-color: rgb(10, 78, 117);
-    outline: 0;
 }
 
 button#pause {
-    margin: 20px;
-    font-size: 18px;
     background: rgb(252, 249, 98);
-    border-color: rgb(133, 130, 3);
-    outline: 0;
+    border-color: rgb(68, 67, 1);
 }
 
 button.speed {
-    margin: 20px;
-    font-size: 18px;
     background: rgb(110, 224, 100);
     border-color: rgb(36, 95, 30);
-    outline: 0;
+
+}
+
+button:hover {
+    background-color: cornflowerblue;
+    font-size: 20px;
+    /* text-emphasis-style: bold; */
+}
+
+div#hello {
+    align: center;
 }
