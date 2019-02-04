@@ -1,0 +1,29 @@
+h1 {
+    align-content: center;
+    font-family: 'Acme', sans-serif;;
+    color: "rgba 60, 60, 60, 1";
+}
+
+button#newGame {
+    margin: 20px;
+    font-size: 18px;
+    background: rgb(107, 182, 226);
+    border-color: rgb(10, 78, 117);
+    outline: 0;
+}
+
+button#pause {
+    margin: 20px;
+    font-size: 18px;
+    background: rgb(252, 249, 98);
+    border-color: rgb(133, 130, 3);
+    outline: 0;
+}
+
+button.speed {
+    margin: 20px;
+    font-size: 18px;
+    background: rgb(110, 224, 100);
+    border-color: rgb(36, 95, 30);
+    outline: 0;
+}

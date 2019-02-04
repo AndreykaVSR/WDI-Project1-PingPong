@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WDI_P1_PingPong_AndreykaVSR</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <script defer src="JS/main.js"></script>
+    <style type="text/css">
+        body
+            {margin:100px; background:#78B087; align-content: center;}
+        #pong-canvas 
+            {background:#78B087; border:rgb(150, 149, 149) 2px solid;}
+    </style>
+    <script>
+        function draw() {
+            var ctx = document.getElementById('pong-canvas').getContext('2d');
+
+            ctx.fillStyle = "#4F6794";
+            ctx.fillRect(50, 5, 900, 490);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 10;
+            ctx.strokeRect(50, 5, 900, 490);
+
+            ctx. beginPath();
+            ctx.moveTo(50, 250);
+            ctx.lineTo(450, 250);
+            ctx.stroke();
+
+            ctx. beginPath();
+            ctx.moveTo(550, 250);
+            ctx.lineTo(950, 250);
+            ctx.stroke();
+
+            ctx.strokeStyle = "rgb(60, 60, 60)";
+            ctx.lineWidth = 5;
+            ctx. beginPath();
+            ctx.moveTo(500, 0);
+            ctx.lineTo(500, 500);
+            ctx.stroke();
+
+            ctx.fillStyle = "rgb(60, 60, 60)";
+            ctx.fillRect(10, 400, 10, 70);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 1;
+            // ctx.strokeRect(10, 400, 10, 70);
+
+            ctx.fillStyle = "rgb(60, 60, 60)";
+            ctx.fillRect(980, 100, 10, 70);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 1;
+            // ctx.strokeRect(980, 100, 10, 70);
+        }
+        window.onload = draw;
+    </script>
+</head>
+<body>
+    <h1>Hello Ping-Pong Peeps!!! Are you ready for this challenge?</h1>
+    <canvas id="pong-canvas" width="1000" height="500"></canvas>
+    <button id=newGame>New Game</button>
+    <button id=pause>Pause</button>
+    <button class=speed id=speed1>Speed 1</button>
+    <button class=speed  id=speed2>Speed 2</button>
+    <button class=speed  id=speed3>Speed 3</button>
+</body>
+</html>
