@@ -1,17 +1,73 @@
 
+/*----- constants -----*/ 
+const ballRadius = 6.54; 
+
+var pedal1;
+var pedal2;
+
 var ballCanvas;
-var x;
-var y;
-var dx;
-var dy;
-var ctx;
+// var x;
+// var y;
+// var dx;
+// var dy;
+// var ctx;
+var pedal1;
+var pedal2;
+
+/*----- app's state (variables) -----*/ 
+
+
+
+/*----- cached element references -----*/ 
+
+
+
+/*----- event listeners -----*/ 
+
+
+
+/*----- functions -----*/
+
+
+
+class Ball {
+    constructor(x, y, dx, dy, ballRadius) {
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.ballRadius = ballRadius;
+		// this.checkCollision = function() {...};
+	};
+}
+
+
+// class pedal1 {
+    //     constructor(x, y, dx, dy, pedalBox1) {
+    // 		this.x = x;
+    // 		this.y = y;
+    // 		this.dx = dx;
+    // 		this.dy = dy;
+    // 		this.pedalBox1 = pedalBox1;
+    // 		this.checkCollision = function() {...};
+    // 	};
+    // }
+
+// class pedal2 {
+        //     constructor(x, y, dx, dy, pedalBox2) {
+        // 		this.x = x;
+        // 		this.y = y;
+        // 		this.dx = dx;
+        // 		this.dy = dy;
+        // 		this.pedalBox2 = pedalBox2;
+        // 		this.checkCollision = function() {...};
+        // 	};
+        // }
 
 function init(){
     ballCanvas = document.getElementById("ball-canvas");
-    x = ballCanvas.width/2;
-    y = ballCanvas.height-30;
-    dx = -2;
-    dy = 0.5;
+
+    ball = new Ball(ballCanvas.width/2, ballCanvas.height-30, -2, .2, ballRadius);
 
 }
 
@@ -50,6 +106,7 @@ ctx.clearRect(0, 0, ballCanvas.width, ballCanvas.height);
 
 // var ctx = document.getElementById("ball-canvas").getContext("2d");
 
+// function draw pedal1
     ctx.fillStyle = "rgba(60, 60, 60, 1)";
     ctx.fillRect(10, 400, 10, 70);
     ctx.strokeStyle = "white";
@@ -60,10 +117,10 @@ ctx.clearRect(0, 0, ballCanvas.width, ballCanvas.height);
     ctx.strokeStyle = "white";
     ctx.lineWidth = 1;
 
-var ballRadius = 6.54; 
+// var ballRadius = 6.54; 
     ctx.beginPath();
     ctx.fillStyle = "rgba(246, 156, 2, 1)";
-    ctx.arc(x, y, ballRadius, 0, Math.PI*2, true);
+    ctx.arc(ball.x, ball.y, ball.ballRadius, 0, Math.PI*2, true);
     ctx.fill();
     ctx.closePath();
 
@@ -73,15 +130,14 @@ var ballRadius = 6.54;
 ballCanvas = document.getElementById("ball-canvas");
 
 
-
-    if (y + dy > ballCanvas.height-ballRadius || y + dy < ballRadius) {
-        dy = - dy;
+    if (ball.y + ball.dy > ballCanvas.height-ballRadius || ball.y + ball.dy < ballRadius) {
+        ball.dy = - ball.dy;
     }
-    if ( x + dx > ballCanvas.width-ballRadius || x + dx < ballRadius) {
-        dx = - dx;
+    if ( ball.x + ball.dx > ballCanvas.width-ballRadius || ball.x + ball.dx < ballRadius) {
+        ball.dx = - ball.dx;
     } 
-    x += dx;
-    y += dy;
+    ball.x += ball.dx;
+    ball.y += ball.dy;
 }
 init();
 setInterval(draw, 10);
