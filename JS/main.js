@@ -1,22 +1,20 @@
 
 /*----- constants -----*/ 
+
+ctx = document.getElementById("ball-canvas").getContext("2d");
+
 const ballRadius = 6.54; 
-
-var pedal1;
-var pedal2;
-
-var ballCanvas;
-// var x;
-// var y;
-// var dx;
-// var dy;
-// var ctx;
-var pedal1;
-var pedal2;
 
 /*----- app's state (variables) -----*/ 
 
+var paddle1;
+// var paddle1X; 
+var paddle2;
+// var paddle2X; 
+var ballCanvas;
 
+var btnUp = false;
+var btnDn = false;
 
 /*----- cached element references -----*/ 
 
@@ -31,7 +29,7 @@ var pedal2;
 
 
 class Ball {
-    constructor(x, y, dx, dy, ballRadius) {
+constructor(x, y, dx, dy, ballRadius) {
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
@@ -41,40 +39,50 @@ class Ball {
 	};
 }
 
+class Paddle {
+    constructor(x, y, dy, w, h) {
+		this.x = x;
+		this.y = y;
+		this.dy = dy;
+		this.w = w;
+		this.h = h;
+		// this.checkCollision = function() {...};
+    };
 
-// class pedal1 {
-    //     constructor(x, y, dx, dy, pedalBox1) {
-    // 		this.x = x;
-    // 		this.y = y;
-    // 		this.dx = dx;
-    // 		this.dy = dy;
-    // 		this.pedalBox1 = pedalBox1;
-    // 		this.checkCollision = function() {...};
-    // 	};
-    // }
+    draw () {
+    
+        ctx.fillStyle = "rgba(60, 60, 60, 1)";
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+        // ctx.shadowColor = "rgba(0, 0, 0, .7)";
+        // ctx.shadowOffsetX = 6;
+        // ctx.shadowOffsetY = 6;
+        // ctx.shadowBlur = 5;
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 1;
 
-// class pedal2 {
-        //     constructor(x, y, dx, dy, pedalBox2) {
-        // 		this.x = x;
-        // 		this.y = y;
-        // 		this.dx = dx;
-        // 		this.dy = dy;
-        // 		this.pedalBox2 = pedalBox2;
-        // 		this.checkCollision = function() {...};
-        // 	};
-        // }
+    }
+    
+};
 
-function init(){
+
+function init() {
     ballCanvas = document.getElementById("ball-canvas");
 
-    ball = new Ball(ballCanvas.width/2, ballCanvas.height-30, -2, .2, ballRadius);
+    paddle1 = new Paddle(20, 400, 7, 10, 70);
+    paddle2 = new Paddle(980, 100, 7, 10, 70);
+    ball = new Ball(paddle1.x + paddle1.w + ballRadius, paddle1.h / 2 + paddle1.y, 2, -.2, ballRadius);
+    // console.log(ball);
 
-}
+   
+};
 
 function draw() {
 
-ctx = document.getElementById("ball-canvas").getContext("2d");
 ctx.clearRect(0, 0, ballCanvas.width, ballCanvas.height);
+
+ 
+    paddle1.draw();
+    paddle2.draw();
 
     ctx.fillStyle = "#4F6794";
     ctx.fillRect(50, 5, 900, 490);
@@ -106,18 +114,6 @@ ctx.clearRect(0, 0, ballCanvas.width, ballCanvas.height);
 
 // var ctx = document.getElementById("ball-canvas").getContext("2d");
 
-// function draw pedal1
-    ctx.fillStyle = "rgba(60, 60, 60, 1)";
-    ctx.fillRect(10, 400, 10, 70);
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 1;
-
-    ctx.fillStyle = "rgba(60, 60, 60, 1)";
-    ctx.fillRect(980, 100, 10, 70);
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 1;
-
-// var ballRadius = 6.54; 
     ctx.beginPath();
     ctx.fillStyle = "rgba(246, 156, 2, 1)";
     ctx.arc(ball.x, ball.y, ball.ballRadius, 0, Math.PI*2, true);
@@ -138,8 +134,48 @@ ballCanvas = document.getElementById("ball-canvas");
     } 
     ball.x += ball.dx;
     ball.y += ball.dy;
-}
+
+
+    if (btnDn && paddle1.y > 0) {
+        paddle1.y -= 7;
+    }
+    else if (btnDn && paddle1.y + paddle1.h < ballCanvas.height) {
+        paddle1.y += 7;
+    }
+    // ball.x += ball.dx;
+    // ball.y += ball.dy;
+
+    if (btnDn && paddle2.y > 0) {
+        paddle2.y -= 7;
+    }
+    else if (btnDn && paddle2.y + paddle2.h < ballCanvas.height) {
+        paddle2.y += 7;
+    }
+};
+
 init();
-setInterval(draw, 10);
+
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+    if(e.key == "40" || e.key == "ArrowUp") {
+        btnUp = true;
+    }
+    else if(e.key == "38" || e.key == "ArrowDown") {
+        btnDn = true;
+    }
+};
+
+function keyUpHandler(e) {
+    if(e.key == "40" || e.key == "ArrowUp") {
+        btnUp = false;
+    }
+    else if(e.key == "38" || e.key == "ArrowDown") {
+        btnDn = false;
+    }
+};
+
+setInterval(draw, 7);
 
 window.onload = draw();
