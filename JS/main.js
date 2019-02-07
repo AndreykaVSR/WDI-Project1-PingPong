@@ -67,16 +67,13 @@ class Paddle {
     
 };
 
-
 function init() {
     ballCanvas = document.getElementById("ball-canvas");
 
-    paddle1 = new Paddle(20, 400, 7, 10, 70);
-    paddle2 = new Paddle(980, 100, 7, 10, 70);
-    ball = new Ball(paddle1.x + paddle1.w + ballRadius, paddle1.h / 2 + paddle1.y, 2, -.2, ballRadius);
+    paddle1 = new Paddle(20, 400, 7, 5, 70);
+    paddle2 = new Paddle(975, 100, 7, 5, 70);
+    ball = new Ball(paddle1.x + paddle1.w + ballRadius, paddle1.h / 2 + paddle1.y, 2, -.5, ballRadius);
     // console.log(ball);
-
-   
 };
 
 function draw() {
@@ -88,8 +85,8 @@ function draw() {
     paddle2.draw();
     // ball.draw();
 
-    // ====================================
-    // Table graphics
+// ====================================
+// Table graphics
 
     ctx.fillStyle = "#4F6794";
     ctx.fillRect(50, 5, 900, 490);
@@ -97,6 +94,7 @@ function draw() {
     ctx.lineWidth = 10;
     ctx.strokeRect(50, 5, 900, 490);
 
+// middle lines
     ctx.beginPath();
     ctx.moveTo(50, 250);
     ctx.lineTo(450, 250);
@@ -108,6 +106,7 @@ function draw() {
     ctx.stroke();
     ctx.save();
 
+// Net
     ctx.strokeStyle = "rgba(60, 60, 60, 1)";
     ctx.lineWidth = 5;
     ctx.beginPath();
@@ -119,8 +118,8 @@ function draw() {
     ctx.lineTo(500, 500);
     ctx.stroke();
 
-    // ================================= 
-    // Ball graphics
+// ================================= 
+// Ball graphics
 
     ctx.beginPath();
     ctx.fillStyle = "rgba(246, 156, 2, 1)";
@@ -149,18 +148,17 @@ function draw() {
     if (ball.y + ball.dy > ballCanvas.height - ballRadius || ball.y + ball.dy < ballRadius) {
         ball.dy = - ball.dy;
     }
-    
-    // if ( (ball.x + ball.dx > ballCanvas.width - ballRadius ) && (ball.y - ballRadius < paddle2.y + paddle2.h)) {
 
-    // ===================================================================================
-    // Checking for the collision on the right side of the canas + right paddle (paddle2)
+// ===================================================================================
+// Checking for the collision on the right side of the canas + right paddle (paddle2)
     if ((ball.x > paddle2.x - ballRadius || ball.x + ball.dx < ballRadius) && 
         (ball.y + ballRadius > paddle2.y && ball.y + ballRadius < paddle2.y + paddle2.h)) {
             ball.dx = - ball.dx;
     } else {
         // console.log("ball is gone on right side!");
     }
-
+// ===================================================================================
+// Checking for the collision on the right side of the canas + right paddle (paddle2)
     if ((ball.x < paddle1.x + paddle1.w + ballRadius || ball.x + ball.dx < ballRadius) && 
         (ball.y + ballRadius > paddle1.y && ball.y + ballRadius < paddle1.y + paddle1.h)) {
             ball.dx = - ball.dx;
@@ -294,7 +292,7 @@ function keyUpHandler(e) {
 
 };
 
-setInterval(draw, 10);
+setInterval(draw, 5);
 
 window.onload = draw();
 

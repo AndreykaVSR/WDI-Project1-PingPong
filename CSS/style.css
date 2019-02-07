@@ -5,8 +5,8 @@ body {
 }
 
 #ball-canvas {
-    background:"white"; 
-    border: gray;
+    /* background: white;  */
+    border-color: gray; 
     /* position: absolute; */
 }
 
