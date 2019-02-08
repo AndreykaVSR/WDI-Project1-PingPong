@@ -1,6 +1,6 @@
 
 /*----- constants -----*/ 
-
+var resetInt;
 ctx = document.getElementById("ball-canvas").getContext("2d");
 
 const ballRadius = 6.54; 
@@ -8,9 +8,7 @@ const ballRadius = 6.54;
 /*----- app's state (variables) -----*/ 
 
 var paddle1;
-// var paddle1X; 
 var paddle2;
-// var paddle2X; 
 var ballCanvas;
 
 var keyPressed = false;
@@ -18,27 +16,30 @@ var btnUp1 = false;
 var btnDn1 = false;
 var btnUp2 = false;
 var btnDn2 = false;
+var ballIsGone = false;
+
+let score, winner;
 
 /*----- cached element references -----*/ 
 
-
+const scoreEls = {
+    p1: document.querySelector('#p1 > h1'),
+    p2: document.querySelector('#p2 > h1'),
+  };
 
 /*----- event listeners -----*/ 
 
-
+document.getElementById("newGame").addEventListener('click', newGame);
 
 /*----- functions -----*/
 
-
-
 class Ball {
-constructor(x, y, dx, dy, ballRadius) {
+    constructor(x, y, dx, dy, ballRadius) {
 		this.x = x;
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
 		this.ballRadius = ballRadius;
-		// this.checkCollision = function() {...};
 	};
 }
 
@@ -48,42 +49,30 @@ class Paddle {
 		this.y = y;
 		this.dy = dy;
 		this.w = w;
-		this.h = h;
-		// this.checkCollision = function() {...};
+        this.h = h;
+        this.score = 0;
     };
 
     draw () {
-    
         ctx.fillStyle = "rgba(60, 60, 60, 1)";
         ctx.fillRect(this.x, this.y, this.w, this.h);
-        // ctx.shadowColor = "rgba(0, 0, 0, .7)";
-        // ctx.shadowOffsetX = 6;
-        // ctx.shadowOffsetY = 6;
-        // ctx.shadowBlur = 5;
-        // ctx.strokeStyle = "white";
-        // ctx.lineWidth = 1;
-
     }
-    
 };
 
 function init() {
     ballCanvas = document.getElementById("ball-canvas");
 
-    paddle1 = new Paddle(20, 400, 7, 5, 70);
-    paddle2 = new Paddle(975, 100, 7, 5, 70);
-    ball = new Ball(paddle1.x + paddle1.w + ballRadius, paddle1.h / 2 + paddle1.y, 2, -.5, ballRadius);
-    // console.log(ball);
+    paddle1 = new Paddle(0, 400, 7, 5, 70);
+    paddle2 = new Paddle(995, 100, 7, 5, 70);
+    ball = new Ball(paddle1.x + paddle1.w + ballRadius+50, paddle1.h / 2 + paddle1.y, 2, -.3, ballRadius);
 };
 
 function draw() {
 
     ctx.clearRect(0, 0, ballCanvas.width, ballCanvas.height);
 
- 
     paddle1.draw();
     paddle2.draw();
-    // ball.draw();
 
 // ====================================
 // Table graphics
@@ -120,7 +109,6 @@ function draw() {
 
 // ================================= 
 // Ball graphics
-
     ctx.beginPath();
     ctx.fillStyle = "rgba(246, 156, 2, 1)";
     ctx.arc(ball.x, ball.y, ball.ballRadius, 0, Math.PI*2, true);
@@ -128,72 +116,53 @@ function draw() {
     ctx.closePath();
     ctx.restore();
 
-
-    // ballCanvas = document.getElementById("ball-canvas");
-
-    // ================================= 
-    // Ball vs canvas collision 
-
-    // if (ball.y + ball.dy > ballCanvas.height - ballRadius || ball.y + ball.dy < ballRadius) {
-    //     ball.dy = - ball.dy;
-    // }
-    // if ( ball.x + ball.dx > ballCanvas.width - ballRadius || ball.x + ball.dx < ballRadius) {
-    //     ball.dx = - ball.dx;
-    // } 
-    // ball.x += ball.dx;
-    // ball.y += ball.dy;
-
     // ===================================================================
     // Checking for the collision on the bottom and the top of the canas. 
-    if (ball.y + ball.dy > ballCanvas.height - ballRadius || ball.y + ball.dy < ballRadius) {
+    if (ball.y + ball.dy > ballCanvas.height - ballRadius || ball.y + ball.dy < 0) {
         ball.dy = - ball.dy;
     }
 
 // ===================================================================================
 // Checking for the collision on the right side of the canas + right paddle (paddle2)
-    if ((ball.x > paddle2.x - ballRadius || ball.x + ball.dx < ballRadius) && 
+    if ((ball.x > paddle2.x - ballRadius) && 
         (ball.y + ballRadius > paddle2.y && ball.y + ballRadius < paddle2.y + paddle2.h)) {
             ball.dx = - ball.dx;
-    } else {
+    } else if (ball.x > ballCanvas.width + ballRadius) {
+            ballIsGone = true;
+            console.log('ball is gone on the right ');
+            paddle1.score += 1;
+            render();
+            clearInterval(resetInt);
+            setTimeout(function(){
+                // init();
+                ball = new Ball(paddle1.x + paddle1.w + ballRadius+50, paddle1.h / 2 + paddle1.y, 2, -.3, ballRadius);
+                resetInt = setInterval(draw, 5);
+                ballIsGone = false;
+            }, 2000);
         // console.log("ball is gone on right side!");
     }
 // ===================================================================================
-// Checking for the collision on the right side of the canas + right paddle (paddle2)
-    if ((ball.x < paddle1.x + paddle1.w + ballRadius || ball.x + ball.dx < ballRadius) && 
+// Checking for the collision on the right side of the canas + left paddle (paddle1)
+
+    if ((ball.x < paddle1.x + paddle1.w + ballRadius /* || ball.x + ball.dx < ballRadius*/) && 
         (ball.y + ballRadius > paddle1.y && ball.y + ballRadius < paddle1.y + paddle1.h)) {
             ball.dx = - ball.dx;
-    } else {
-        // init ();
-        // console.log("ball is gone on left side!");
+    } else if (ball.x < -25) {
+        ballIsGone = true;
+        // console.log('ball is gone on the left ');
+        paddle2.score += 1;
+        render();
+        clearInterval(resetInt);
+        setTimeout(function(){
+            ball = new Ball(paddle1.x + paddle1.w + ballRadius+50, paddle1.h / 2 + paddle1.y, 2, -.3, ballRadius);
+            resetInt = setInterval(draw, 5);
+            ballIsGone = false;
+        }, 2000);
     }
     ball.x += ball.dx;
     ball.y += ball.dy;
 
-    // ================================= 
-    // Ball vs Paddles collision
-
-    // if (ball.x + ball.dx > ballCanvas.width - ballRadius) {
-        // } 
-        
-        // if (ball.y + ballRadius >= paddle1.y && ball.x - ballRadius < paddle1.x + paddle1.w) {
-        //     ball.dx = - ball.dx; 
-        // } else if (ball.y - ballRadius <= paddle1.y + paddle1.h)
-        //     ball.dx = - ball.dx
-           
-            
-        //     + ballRadius > paddle1.x || ball.x <  paddle1.x + paddle1.w) {
-        //     ball.dx = - ball.dx;
-        // }
-               
-    //  || ball.y + ball.dy < ballRadius) {
-        // ball.dx = - ball.dx;
-
-    // if (ball.y + ball.dy > paddle2 - ballRadius || ball.y + ball.dy < ballRadius) {
-    //     // ball.dx = - ball.dx;
-    // }
-
-    // ball.x += ball.dx;
-
+    
     // ================================= 
     // Paddles vs canvas collision
 
@@ -226,26 +195,15 @@ function draw() {
 
     if (keyPressed && keyPressed == 40) { 
         if (paddle2.y + paddle2.h < ballCanvas.height) {
-        paddle2.y += 3;
+            paddle2.y += 3;
         } else if (paddle2.y + paddle2.h > ballCanvas.height - paddle2.h){
         paddle2.y = ballCanvas.height - paddle2.h
         }
     }
-    // console.log ( 'paddles ' +paddle1 + paddle2);
-
-    // ball.x += ball.dx;
-    // ball.y += ball.dy;
-
-    // if (btnDn && paddle2.y > 0) {
-    //     paddle2.y -= 7;
-        
-    // }
-    // else if (btnDn && paddle2.y + paddle2.h < ballCanvas.height) {
-    //     paddle2.y += 7;
-    // }
 };
 
-// Button assignment / Event Listeners
+// ====================================
+// Button assignment
 
 init();
 
@@ -253,46 +211,34 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 function keyDownHandler(e) {
-
     keyPressed = e.keyCode;
-    // if (e.key == "87" || e.key == "W" || e.key == "w") {
-    //     btnUp1 = true;
-    // }
-    // else if (e.key == "83" || e.key == "S" || e.key == "s") {
-    //     btnDn1 = true;
-    // }
-
-    // if (e.key == "38" || e.key == "ArrowUp") {
-    //     btnUp2 = true;
-    // }
-    // else if (e.key == "40" || e.key == "ArrowDown") {
-    //     btnDn2 = true;
-    // }
-    console.log(keyPressed);
 };
 
 function keyUpHandler(e) {
-
     keyPressed = false;
-    // if(e.key == "38" || e.key == "ArrowUp") {
-    //     btnUp1 = false;
-    // }
-    // else if(e.key == "40" || e.key == "ArrowDown") {
-    //     btnDn1 = false;
-    // }
-
-    // if(e.key == "87" || e.key == "W" || e.key == "w") {
-    //     btnUp2 = false;
-    // }
-    // else if(e.key == "83" || e.key == "S" || e.key == "s") {
-    //     btnDn2 = false;
-    // }
-
-    // console.log();
-
 };
 
-setInterval(draw, 5);
+var $p1Score = document.querySelector("#p1 h1");
+var $p2Score = document.querySelector("#p2 h1");
+
+function render() {
+
+    $p1Score.textContent = paddle1.score;
+    $p2Score.textContent = paddle2.score;
+  }
+
+// New Game Button ********************************************
+// ============================================================
+
+function newGame() {
+    paddle1 = new Paddle(0, 400, 7, 5, 70);
+    paddle2 = new Paddle(995, 100, 7, 5, 70);
+    ball = new Ball(paddle1.x + paddle1.w + ballRadius+50, paddle1.h / 2 + paddle1.y, 2, -.3, ballRadius);
+    render();
+}
+
+resetInt = setInterval(draw, 5);
 
 window.onload = draw();
+
 

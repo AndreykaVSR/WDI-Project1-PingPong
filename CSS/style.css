@@ -1,16 +1,18 @@
 body {
-    margin: 0 10% auto; 
+    /* margin: 0 10% auto;  */
     background:#78B087; 
     align-content: center;
 }
 
 #ball-canvas {
-    /* background: white;  */
+    margin: -3% 10% auto; 
+    background:#78B087; 
     border-color: gray; 
     /* position: absolute; */
-}
+ }
 
 h1 {
+    margin: 0 10% auto;
     justify-content: center;
     font-family: 'Acme', sans-serif;;
     color: rgba(60, 60, 60, 1);
@@ -44,9 +46,42 @@ button.speed {
 
 button:hover {
     background-color: cornflowerblue;
-    font-size: 20px;
+    /* font-size: 20px; */
 }
 
-#hello {
-    align: center;
+#p1 {
+    /* position: relative; */
+    /* left: 15%; */
+    font-size: 10px;
+    /* margin-right: 500px; */
+    font-family: 'Acme', sans-serif;
+    color: rgba(60, 60, 60, 1);
 }
+
+#p2 {
+    position: relative;
+    font-size: 10px;
+    left: 86.5%;
+    font-family: 'Acme', sans-serif;
+    color: rgba(60, 60, 60, 1);
+}
+
+section#p1 {
+    flex-direction: column;
+    align-items: right;
+    display: flex;
+    margin: 5px;
+    /* width: 250px;  */
+  }
+
+  section#p2 {
+    flex-direction: column;
+    align-items: left;
+    display: flex;
+    margin: 5px;
+    /* width: 250px;  */
+  }
+
+  main {
+    display: flex;
+  }
